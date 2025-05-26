@@ -1,0 +1,82 @@
+﻿@model OrderViewModel
+
+@{
+    ViewData["Title"] = "Создать заказ";
+}
+
+<h1>Создать новый заказ</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label asp-for="CustomerName" class="control-label"></label>
+                    <input asp-for="CustomerName" class="form-control" />
+                    <span asp-validation-for="CustomerName" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="PhoneNumber" class="control-label"></label>
+                    <input asp-for="PhoneNumber" class="form-control" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            
+            <h4>Блюда в заказе:</h4>
+            <table class="table" id="orderItemsTable">
+                <thead>
+                    <tr>
+                        <th>Блюдо</th>
+                        <th>Количество</th>
+                        <th>Цена</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (var i = 0; i < Model.OrderItems.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                <select asp-for="@Model.OrderItems[i].DishId" asp-items="@(new SelectList(ViewBag.Dishes, "Id", "Name"))" class="form-control dish-select">
+                                    <option value="">-- Выберите блюдо --</option>
+                                </select>
+                            </td>
+                            <td>
+                                <input asp-for="@Model.OrderItems[i].Quantity" class="form-control quantity" min="1" value="1" />
+                            </td>
+                            <td class="price-cell">
+                                <span class="price">0.00</span> ₽
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger remove-item">×</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            
+            <button type="button" id="addItem" class="btn btn-secondary mb-3">Добавить блюдо</button>
+            
+            <div class="form-group">
+                <h5>Итого: <span id="totalAmount">0.00</span> ₽</h5>
+            </div>
+            
+            <div class="form-group">
+                <input type="submit" value="Создать заказ" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Отмена</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+                
